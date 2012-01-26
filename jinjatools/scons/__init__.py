@@ -1,6 +1,8 @@
-# jinja-builder
+# jinja-tools
 #
-# a simple jinja2 based JinjaBuilder class for scons
+# various tools for Jinja2
+# including new filters and tests based on python-moretools
+# and a simple jinja2 based JinjaBuilder class for scons
 #
 # Copyright (C) 2011 Stefan Zimmermann <zimmermann.code@googlemail.com>
 #
