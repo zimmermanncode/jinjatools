@@ -20,30 +20,53 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-from SCons.Builder import BuilderBase
-from SCons.Action import Action
+from moretools import *
 
-from ..env import Environment
+__all__ = 'filters',
 
-__all__ = 'JinjaBuilder',
-
-class JinjaBuilder(BuilderBase):
-  def __init__(self, jinja_loader, jinja_context = {}):
-    BuilderBase.__init__(
-      self,
-      action = Action(self.__action),
-      src_suffix = '.jinja',
-      suffix = '',
-      )
-
-    self.__jinja_env = Environment(loader = jinja_loader)
-    self.__context = jinja_context
-
-  def __action(self, target, source, env):
-    context = dict(self.__context)
-    try: context.update(env['JINJACONTEXT'])
+def dictremove(dict_, *keys):
+  for key in keys:
+    try: del dict_[key]
     except KeyError: pass
 
-    open(str(target[0]), 'w').write(
-      self.__jinja_env.from_string(open(str(source[0])).read())
-      .render(context).encode())
+  return dict_
+
+def dictupdate(dict_, items = (), **kwitems):
+  dict_.update(items, **kwitems)
+  return dict_
+
+filters = dict(
+  mapattr = mapattr,
+  mapmapattr = mapmapattr
+
+  mapattrs = mapattrs,
+  mapmapattrs = mapmapattrs,
+
+  mapitem = mapitem,
+  mapmapitem = mapmapitem,
+
+  mapitems = mapitems,
+  mapmapitems = mapmapitems,
+
+  mapmethodcall = mapmethodcall,
+  mapmapmethodcall = mapmapmethodcall,
+
+  mapjoin = lambda seqs, sep: map(
+    lambda seq: sep.join(map(str, seq)),
+    seqs),
+
+  zip = lambda seq, *seqs: zip(*chain(seq, seqs)),
+  zipwith = zip,
+
+  repeat = repeat,
+
+  chain = lambda seq, *seqs: chain(*chain(seq, seqs)),
+  chainwith = chain,
+
+  dict = dict,
+
+  dictremove = dictremove,
+  dictupdate = dictupdate,
+
+  partial = partial,
+  )

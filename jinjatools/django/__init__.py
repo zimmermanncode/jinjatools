@@ -20,30 +20,36 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-from SCons.Builder import BuilderBase
-from SCons.Action import Action
+import jinja2
 
 from ..env import Environment
 
-__all__ = 'JinjaBuilder',
+all = 'JinjaLoader',
 
-class JinjaBuilder(BuilderBase):
-  def __init__(self, jinja_loader, jinja_context = {}):
-    BuilderBase.__init__(
-      self,
-      action = Action(self.__action),
-      src_suffix = '.jinja',
-      suffix = '',
-      )
+class Template(object):
+  def __init__(self, template):
+    self.template = template
 
-    self.__jinja_env = Environment(loader = jinja_loader)
-    self.__context = jinja_context
+  def render(self, context):
+    dicts = context.dicts
 
-  def __action(self, target, source, env):
-    context = dict(self.__context)
-    try: context.update(env['JINJACONTEXT'])
-    except KeyError: pass
+    context = {}
+    for d in dicts: context.update(d)
 
-    open(str(target[0]), 'w').write(
-      self.__jinja_env.from_string(open(str(source[0])).read())
-      .render(context).encode())
+    return self.template.render(context)
+
+def JinjaLoader(DjangoLoader):
+  class JinjaLoader(DjangoLoader):
+    def __init__(self, jinja_loader):
+      self.__env = Environment(loader = jinja_loader)
+
+    def load_template(self, name, dirs):
+      if name.startswith('jinja:'):
+        source, origin = self.load_template_source(
+          name.split('jinja:', 1)[1], dirs)
+
+        return Template(self.__env.from_string(source)), origin
+
+      return DjangoLoader.load_template(self, name, dirs)
+
+  return JinjaLoader

@@ -6,7 +6,8 @@ setup(
   description = (
     'various tools for Jinja2'
     ' including new filters and tests based on python-moretools'
-    ' and a simple jinja2 based JinjaBuilder class for scons'
+    ' a JinjaLoader class for Django'
+    ' and a simple JinjaBuilder class for SCons'
     ),
 
   author = 'Stefan Zimmermann',
@@ -15,6 +16,8 @@ setup(
 
   license = 'LGPLv3',
 
+  packages = ['jinjatools'],
+  packages = ['jinjatools.django'],
   packages = ['jinjatools.scons'],
 
   classifiers = [
