@@ -39,18 +39,28 @@ class Template(object):
 
     return self.template.render(context)
 
-def JinjaLoader(DjangoLoader):
-  class JinjaLoader(DjangoLoader):
-    def __init__(self, jinja_loader):
-      self.__env = Environment(loader = jinja_loader)
+class LoaderFactory(object):
+  def __getitem__(self, DjangoLoader):
+    class JinjaLoader(DjangoLoader):
+      def __init__(self, jinja2_loader,
+                   filters = {}, tests = {}, globals = {},
+                   **kwargs):
 
-    def load_template(self, name, dirs):
-      if name.startswith('jinja:'):
-        source, origin = self.load_template_source(
-          name.split('jinja:', 1)[1], dirs)
+        DjangoLoader.__init__(self)
 
-        return Template(self.__env.from_string(source)), origin
+        self.jinja2_env = Environment(
+          loader = jinja2_loader,
+          filters = filters, tests = tests, globals = globals)
 
-      return DjangoLoader.load_template(self, name, dirs)
+      def load_template(self, name, dirs):
+        if name.startswith('jinja:'):
+          source, origin = self.load_template_source(
+            name.split('jinja:', 1)[1], dirs)
 
-  return JinjaLoader
+          return Template(self.jinja2_env.from_string(source)), origin
+
+        return DjangoLoader.load_template(self, name, dirs)
+
+    return JinjaLoader
+
+JinjaLoader = LoaderFactory()

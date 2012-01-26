@@ -37,7 +37,7 @@ def dictupdate(dict_, items = (), **kwitems):
 
 filters = dict(
   mapattr = mapattr,
-  mapmapattr = mapmapattr
+  mapmapattr = mapmapattr,
 
   mapattrs = mapattrs,
   mapmapattrs = mapmapattrs,

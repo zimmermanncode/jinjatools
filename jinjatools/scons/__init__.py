@@ -28,7 +28,7 @@ from ..env import Environment
 __all__ = 'JinjaBuilder',
 
 class JinjaBuilder(BuilderBase):
-  def __init__(self, jinja_loader, jinja_context = {}):
+  def __init__(self, jinja2_loader, context = {}):
     BuilderBase.__init__(
       self,
       action = Action(self.__action),
@@ -36,16 +36,16 @@ class JinjaBuilder(BuilderBase):
       suffix = '',
       )
 
-    self.__jinja_env = Environment(loader = jinja_loader)
-    self.__context = jinja_context
+    self.jinja2_env = Environment(loader = jinja_loader)
+    self.template_context = context
 
   def __action(self, target, source, env):
-    context = dict(self.__context)
+    context = dict(self.template_context)
     try:
       context.update(env['JINJACONTEXT'])
     except KeyError:
       pass
 
     open(str(target[0]), 'w').write(
-      self.__jinja_env.from_string(open(str(source[0])).read())
+      self.jinja2_env.from_string(open(str(source[0])).read())
       .render(context).encode())

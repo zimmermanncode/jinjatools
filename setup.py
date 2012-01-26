@@ -16,9 +16,11 @@ setup(
 
   license = 'LGPLv3',
 
-  packages = ['jinjatools'],
-  packages = ['jinjatools.django'],
-  packages = ['jinjatools.scons'],
+  packages = [
+    'jinjatools',
+    'jinjatools.django',
+    'jinjatools.scons',
+    ],
 
   classifiers = [
     'Development Status :: 3 - Alpha',
