@@ -41,8 +41,10 @@ class JinjaBuilder(BuilderBase):
 
   def __action(self, target, source, env):
     context = dict(self.__context)
-    try: context.update(env['JINJACONTEXT'])
-    except KeyError: pass
+    try:
+      context.update(env['JINJACONTEXT'])
+    except KeyError:
+      pass
 
     open(str(target[0]), 'w').write(
       self.__jinja_env.from_string(open(str(source[0])).read())

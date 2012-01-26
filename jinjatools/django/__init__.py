@@ -34,7 +34,8 @@ class Template(object):
     dicts = context.dicts
 
     context = {}
-    for d in dicts: context.update(d)
+    for d in dicts:
+      context.update(d)
 
     return self.template.render(context)
 
