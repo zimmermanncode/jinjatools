@@ -5,7 +5,7 @@ setup(
   version = '0.1a',
   description = (
     'various tools for Jinja2'
-    ' including new filters and tests based on python-moretools'
+    ' including new filters and tests based on python-moretools,'
     ' a JinjaLoader class for Django'
     ' and a simple JinjaBuilder class for SCons'
     ),
@@ -37,6 +37,8 @@ setup(
 
   keywords = [
     'jinja', 'jinja2', 'tools', 'template', 'macro',
-    'filter', 'test', 'moretools', 'builder', 'build',
+    'filter', 'test', 'moretools',
+    'scons', 'builder', 'build',
+    'django', 'web', 'html',
     ],
   )
