@@ -1,8 +1,8 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
   name = 'jinja-tools',
-  version = '0.1a',
+  version = '0.1a1',
   description = (
     'various tools for Jinja2'
     ' including new filters and tests based on python-moretools,'
@@ -20,6 +20,11 @@ setup(
     'jinjatools',
     'jinjatools.django',
     'jinjatools.scons',
+    ],
+
+  install_requires = [
+    'python-moretools',
+    'Jinja2',
     ],
 
   classifiers = [
