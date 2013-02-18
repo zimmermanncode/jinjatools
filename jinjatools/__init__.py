@@ -1,11 +1,11 @@
 # jinja-tools
 #
-# various tools for Jinja2
+# Various tools for Jinja2,
 # including new filters and tests based on python-moretools,
-# a JinjaLoader class for Django
-# and a simple JinjaBuilder class for SCons
+# a JinjaLoader class for Django,
+# and a simple JinjaBuilder class for SCons.
 #
-# Copyright (C) 2011 Stefan Zimmermann <zimmermann.code@googlemail.com>
+# Copyright (C) 2011-2013 Stefan Zimmermann <zimmermann.code@gmail.com>
 #
 # jinja-tools is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -20,5 +20,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-from .filters import *
-from .env import *
+from .filters import filters
+from .env import Environment

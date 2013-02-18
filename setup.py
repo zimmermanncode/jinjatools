@@ -2,29 +2,27 @@ from setuptools import setup
 
 setup(
   name = 'jinja-tools',
-  version = '0.1a1',
+  version = '0.1a2',
   description = (
-    'various tools for Jinja2'
+    'Various tools for Jinja2,'
     ' including new filters and tests based on python-moretools,'
-    ' a JinjaLoader class for Django'
-    ' and a simple JinjaBuilder class for SCons'
+    ' a JinjaLoader class for Django,'
+    ' and a simple JinjaBuilder class for SCons.'
     ),
-
   author = 'Stefan Zimmermann',
-  author_email = 'zimmermann.code@googlemail.com',
+  author_email = 'zimmermann.code@gmail.com',
   url = 'http://bitbucket.org/StefanZimmermann/jinja-tools',
 
   license = 'LGPLv3',
 
+  install_requires = [
+    'python-moretools >= 0.1a7',
+    'Jinja2',
+    ],
   packages = [
     'jinjatools',
     'jinjatools.django',
     'jinjatools.scons',
-    ],
-
-  install_requires = [
-    'python-moretools',
-    'Jinja2',
     ],
 
   classifiers = [
@@ -39,7 +37,6 @@ setup(
     'Topic :: Software Development',
     'Topic :: Utilities',
     ],
-
   keywords = [
     'jinja', 'jinja2', 'tools', 'template', 'macro',
     'filter', 'test', 'moretools',

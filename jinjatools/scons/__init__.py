@@ -1,9 +1,9 @@
 # jinja-tools
 #
-# various tools for Jinja2
+# Various tools for Jinja2,
 # including new filters and tests based on python-moretools,
-# a JinjaLoader class for Django
-# and a simple JinjaBuilder class for SCons
+# a JinjaLoader class for Django,
+# and a simple JinjaBuilder class for SCons.
 #
 # Copyright (C) 2011 Stefan Zimmermann <zimmermann.code@googlemail.com>
 #
@@ -23,29 +23,30 @@
 from SCons.Builder import BuilderBase
 from SCons.Action import Action
 
-from ..env import Environment
+import jinjatools
 
 __all__ = 'JinjaBuilder',
 
 class JinjaBuilder(BuilderBase):
-  def __init__(self, jinja2_loader, context = {}):
+  def __init__(self, jinja_loader, context = {}):
     BuilderBase.__init__(
-      self,
-      action = Action(self.__action),
-      src_suffix = '.jinja',
-      suffix = '',
-      )
+      self, action = Action(self.jinja_action),
+      src_suffix = '.jinja', suffix = '')
 
-    self.jinja2_env = Environment(loader = jinja_loader)
-    self.template_context = context
+    self.jinja_env = jinjatools.Environment(loader = jinja_loader)
+    self.jinja_template_context = context
 
-  def __action(self, target, source, env):
-    context = dict(self.template_context)
+  def jinja_action(self, target, source, scons_env):
+    context = dict(self.jinja_template_context)
     try:
-      context.update(env['JINJACONTEXT'])
+      context.update(scons_env['JINJACONTEXT'])
     except KeyError:
       pass
 
-    open(str(target[0]), 'w').write(
-      self.jinja2_env.from_string(open(str(source[0])).read())
-      .render(context).encode())
+    sourcefile = open(str(source[0]))
+    template = self.jinja_env.from_string(sourcefile.read())
+    sourcefile.close()
+
+    targetfile = open(str(target[0]), 'w')
+    targetfile.write(template.render(context).encode())
+    targetfile.close()
