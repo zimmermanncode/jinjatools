@@ -50,3 +50,5 @@ class JinjaBuilder(BuilderBase):
     targetfile = open(str(target[0]), 'w')
     targetfile.write(template.render(context).encode())
     targetfile.close()
+
+  jinja_action.func_name = 'Jinja'
