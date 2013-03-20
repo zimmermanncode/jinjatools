@@ -58,10 +58,18 @@ filters = dict(
   zip = lambda seq, *seqs: zip(*chain(seq, seqs)),
   zipwith = zip,
 
+  tee = tee,
+
   repeat = repeat,
 
   chain = lambda seq, *seqs: chain(*chain(seq, seqs)),
   chainwith = chain,
+
+  combine = combinations,
+  permutate = permutations,
+
+  cross = lambda seq, *seqs: product(*chain(seq, seqs)),
+  crosswith = product,
 
   dict = dict,
 
