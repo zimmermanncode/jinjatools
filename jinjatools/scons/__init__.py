@@ -36,10 +36,10 @@ class JinjaBuilder(BuilderBase):
     self.jinja_env = jinjatools.Environment(loader = jinja_loader)
     self.jinja_template_context = context
 
-  def jinja_action(self, target, source, scons_env):
+  def jinja_action(self, target, source, env):
     context = dict(self.jinja_template_context)
     try:
-      context.update(scons_env['JINJACONTEXT'])
+      context.update(env['JINJACONTEXT'])
     except KeyError:
       pass
 
