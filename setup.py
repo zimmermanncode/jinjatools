@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
   name = 'jinja-tools',
-  version = '0.1a2',
+  version = '0.1a3',
   description = (
     'Various tools for Jinja2,'
     ' including new filters and tests based on python-moretools,'
