@@ -5,7 +5,7 @@
 # a JinjaLoader class for Django,
 # and a simple JinjaBuilder class for SCons.
 #
-# Copyright (C) 2011 Stefan Zimmermann <zimmermann.code@googlemail.com>
+# Copyright (C) 2011-2013 Stefan Zimmermann <zimmermann.code@gmail.com>
 #
 # jinja-tools is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
