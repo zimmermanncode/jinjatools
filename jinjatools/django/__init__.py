@@ -20,6 +20,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.core import urlresolvers
+
 import jinjatools
 
 all = 'JinjaLoader',
@@ -36,6 +38,10 @@ class Template(object):
 
     return self.template.render(context)
 
+class Django(object):
+    def url(self, name):
+        return urlresolvers.reverse(name)
+
 class LoaderFactory(object):
   def __getitem__(self, DjangoLoader):
     class JinjaLoader(DjangoLoader):
@@ -45,6 +51,10 @@ class LoaderFactory(object):
         ):
         DjangoLoader.__init__(self)
 
+        globals = dict(globals)
+        globals.update(
+          django=Django(),
+          )
         self.jinja_env = jinjatools.Environment(
           loader = jinja_loader,
           filters = filters, tests = tests, globals = globals)
