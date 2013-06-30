@@ -77,4 +77,6 @@ filters = dict(
   dictupdate = dictupdate,
 
   partial = partial,
+
+  split = str.split,
   )
