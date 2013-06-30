@@ -43,12 +43,16 @@ class JinjaBuilder(BuilderBase):
     except KeyError:
       pass
 
-    sourcefile = open(str(source[0]))
-    template = self.jinja_env.from_string(sourcefile.read())
-    sourcefile.close()
+    options = {}
+    try:
+      options['loader'] = env['JINJALOADER']
+    except KeyError:
+      pass
+    overlay = self.jinja_env.overlay(**options)
+    template = overlay.get_template(str(source[0]))
 
     targetfile = open(str(target[0]), 'w')
-    targetfile.write(template.render(context).encode())
+    targetfile.write(template.render(context).encode('utf-8'))
     targetfile.close()
 
   jinja_action.func_name = 'Jinja'
