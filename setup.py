@@ -11,7 +11,7 @@ setup(
     ),
   author = 'Stefan Zimmermann',
   author_email = 'zimmermann.code@gmail.com',
-  url = 'http://bitbucket.org/StefanZimmermann/jinja-tools',
+  url = 'http://bitbucket.org/userzimmermann/python-jinjatools',
 
   license = 'LGPLv3',
 
