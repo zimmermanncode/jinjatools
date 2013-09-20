@@ -5,7 +5,7 @@ setup(
   version = '0.1a10',
   description = (
     'Various tools for Jinja2,'
-    ' including new filters and tests based on python-moretools,'
+    ' including new filters and tests based on moretools,'
     ' a JinjaLoader class for Django,'
     ' and a simple JinjaBuilder class for SCons.'
     ),
@@ -16,7 +16,7 @@ setup(
   license = 'LGPLv3',
 
   install_requires = [
-    'python-moretools >= 0.1a7',
+    'moretools >= 0.1a25',
     'Jinja2',
     ],
   packages = [
