@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-  name = 'jinja-tools',
+  name = 'jinjatools',
   version = '0.1a10',
   description = (
     'Various tools for Jinja2,'
