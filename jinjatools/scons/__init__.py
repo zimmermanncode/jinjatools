@@ -20,39 +20,44 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
+"""jinjatools.scons
+
+.. moduleauthor:: Stefan Zimmermann <zimmermann.code@gmail.com>
+"""
+__all__ = ['JinjaBuilder']
+
 from SCons.Builder import BuilderBase
 from SCons.Action import Action
 
 import jinjatools
 
-__all__ = 'JinjaBuilder',
 
 class JinjaBuilder(BuilderBase):
-  def __init__(self, jinja_loader, context = {}):
-    BuilderBase.__init__(
-      self, action = Action(self.jinja_action),
-      src_suffix = '.jinja', suffix = '')
+    def __init__(self, jinja_loader, context={}):
+        BuilderBase.__init__(
+          self, action=Action(self.jinja_action),
+          src_suffix='.jinja', suffix='')
 
-    self.jinja_env = jinjatools.Environment(loader = jinja_loader)
-    self.jinja_template_context = context
+        self.jinja_env = jinjatools.Environment(loader=jinja_loader)
+        self.jinja_template_context = context
 
-  def jinja_action(self, target, source, env):
-    context = dict(self.jinja_template_context)
-    try:
-      context.update(env['JINJACONTEXT'])
-    except KeyError:
-      pass
+    def jinja_action(self, target, source, env):
+        context = dict(self.jinja_template_context)
+        try:
+            context.update(env['JINJACONTEXT'])
+        except KeyError:
+            pass
 
-    options = {}
-    try:
-      options['loader'] = env['JINJALOADER']
-    except KeyError:
-      pass
-    overlay = self.jinja_env.overlay(**options)
-    template = overlay.get_template(str(source[0]))
+        options = {}
+        try:
+            options['loader'] = env['JINJALOADER']
+        except KeyError:
+            pass
+        overlay = self.jinja_env.overlay(**options)
+        template = overlay.get_template(str(source[0]))
 
-    targetfile = open(str(target[0]), 'w')
-    targetfile.write(template.render(context).encode('utf-8'))
-    targetfile.close()
+        targetfile = open(str(target[0]), 'wb')
+        targetfile.write(template.render(context).encode('utf-8'))
+        targetfile.close()
 
-  jinja_action.func_name = 'Jinja'
+    jinja_action.__name__ = 'Jinja'
