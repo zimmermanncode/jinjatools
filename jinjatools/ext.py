@@ -20,11 +20,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
+from six import add_metaclass
+
 from jinja2.ext import Extension
 from jinja2.nodes import CallBlock
 
+
 class TagExtensionMeta(type(Extension)):
-    def __new__(cls, clsname, bases, clsattrs):
+    def __new__(mcs, clsname, bases, clsattrs):
         tagtree = {}
         for name in clsattrs:
             if name.startswith('tag_'):
@@ -33,7 +36,7 @@ class TagExtensionMeta(type(Extension)):
                     level = level.setdefault(tag, {})
 
         clsattrs['tags'] = set(tagtree)
-        cls = type(Extension).__new__(cls, clsname, bases, clsattrs)
+        cls = type(Extension).__new__(mcs, clsname, bases, clsattrs)
 
         def parse_subtags(self, tag, parser):
             level = tagtree[tag]
@@ -55,8 +58,9 @@ class TagExtensionMeta(type(Extension)):
         cls._parse_subtags = parse_subtags
         return cls
 
+
+@add_metaclass(TagExtensionMeta)
 class TagExtension(Extension):
-    __metaclass__ = TagExtensionMeta
 
     def parse(self, parser):
         tag = parser.stream.current.value

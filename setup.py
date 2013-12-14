@@ -16,6 +16,7 @@ setup(
   license = 'LGPLv3',
 
   install_requires = [
+    'six',
     'moretools >= 0.1a25',
     'Jinja2',
     ],
@@ -42,5 +43,6 @@ setup(
     'filter', 'test', 'moretools',
     'scons', 'builder', 'build',
     'django', 'web', 'html',
+    'python3',
     ],
   )
