@@ -26,6 +26,8 @@
 """
 __all__ = ['JinjaBuilder']
 
+import os
+
 from SCons.Builder import BuilderBase
 from SCons.Action import Action
 
@@ -56,7 +58,11 @@ class JinjaBuilder(BuilderBase):
         overlay = self.jinja_env.overlay(**options)
         template = overlay.get_template(str(source[0]))
 
-        targetfile = open(str(target[0]), 'wb')
+        targetpath = str(target[0])
+        # On Windows targetpath has '\\' sep, but Jinja only works with '/':
+        targetpath = '/'.join(targetpath.split(os.path.sep))
+
+        targetfile = open(targetpath, 'wb')
         targetfile.write(template.render(context).encode('utf-8'))
         targetfile.close()
 
