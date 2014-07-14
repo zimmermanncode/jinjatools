@@ -1,3 +1,4 @@
 six
-moretools >= 0.1a25
+path.py
+moretools >= 0.1a38
 Jinja2
