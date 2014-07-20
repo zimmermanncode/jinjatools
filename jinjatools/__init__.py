@@ -20,5 +20,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-from .filters import filters
+from . import zetup
+
+__distribution__ = zetup.DISTRIBUTION.find(__path__[0])
+__version__ = zetup.VERSION
+
+__requires__ = zetup.REQUIRES.checked
+
 from .env import Environment
+# from .filters import filters
