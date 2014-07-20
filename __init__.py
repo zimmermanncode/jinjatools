@@ -38,6 +38,16 @@ except ImportError:
     from distutils.core import setup
 
 
+# Try to get the directory of this script,
+#  to correctly access VERSION, requirements.txt, ...
+try:
+    __file__
+except: # Happens if exec()'d from SConstruct
+    ZETUP_DIR = '.'
+else:
+    ZETUP_DIR = os.path.realpath(os.path.dirname(__file__))
+
+
 class Distribution(str):
     def find(self, modpath, raise_=True):
         dist = get_distribution(self)
@@ -158,6 +168,8 @@ class Requirements(str):
            with additional requirements from `text`.
         """
         return type(self)('%s\n%s' % (
+          # For simplicity:
+          #  Just create explicit modname hints for every requirement:
           '\n'.join('%s # %s' % (req, req.modname) for req in self),
           text))
 
@@ -179,13 +191,22 @@ class Extras(OrderedDict):
 
 
 config = ConfigParser()
-config.read('zetup.cfg')
+for fname in ['zetup.ini', 'zetup.cfg', 'zetuprc']:
+    if config.read(fname):
+        ##TODO: No print after installation (under pkg/zetup/):
+        ## print("zetup: Using config from %s" % fname)
+        ZETUP_DATA = [fname]
+        break
+else:
+    raise RuntimeError("No zetup config found.")
 
-DISTRIBUTION = Distribution(config.sections()[0])
 
-config = dict(config.items(DISTRIBUTION))
+NAME = config.sections()[0]
+DISTRIBUTION = Distribution(NAME)
 
-TITLE = config.get('title', DISTRIBUTION)
+config = dict(config.items(NAME))
+
+TITLE = config.get('title', NAME)
 DESCRIPTION = config['description'].replace('\n', ' ')
 
 AUTHOR = re.match(r'^([^<]+)<([^>]+)>$', config['author'])
@@ -196,7 +217,7 @@ LICENSE = config['license']
 
 PYTHON = config['python'].split()
 
-PACKAGE = config.get('package', DISTRIBUTION)
+PACKAGE = config.get('package', NAME)
 
 CLASSIFIERS = config['classifiers'].strip() \
   .replace('\n::', ' ::').split('\n')
@@ -209,29 +230,28 @@ if any(pyversion.startswith('3') for pyversion in PYTHON):
     KEYWORDS.append('python3')
 
 
-ZETUP_DATA = ['zetup.cfg', 'VERSION', 'requirements.txt']
+ZETUP_DATA += ['VERSION', 'requirements.txt']
 
-VERSION = Version(open('VERSION').read().strip())
+VERSION = Version(open(os.path.join(ZETUP_DIR, 'VERSION')).read().strip())
 
-REQUIRES = Requirements(open('requirements.txt').read())
+REQUIRES = Requirements(open(os.path.join(ZETUP_DIR, 'requirements.txt')).read())
 
 # Extra requirements to use with setup's extras_require=
 EXTRAS = Extras()
 _re = re.compile(r'^requirements\.(?P<name>[^\.]+)\.txt$')
-for fname in sorted(os.listdir('.')):
+for fname in sorted(os.listdir(ZETUP_DIR)):
     match = _re.match(fname)
     if match:
         ZETUP_DATA.append(fname)
 
-        EXTRAS[match.group('name')] = open(fname).read()
-
+        EXTRAS[match.group('name')] = open(os.path.join(ZETUP_DIR, fname)).read()
 
 def zetup(**setup_options):
     """Run setup() with options from zetup.cfg
        and explicit override `setup_options`.
     """
     for option, value in [
-      ('name', DISTRIBUTION),
+      ('name', NAME),
       ('version', VERSION),
       ('description', DESCRIPTION),
       ('author', AUTHOR),
@@ -337,14 +357,14 @@ else:
               "  https://pypi.python.org/pypi/%s):"
               "\n\n"
               "    pip install %s"
-              % tuple(2 * [DISTRIBUTION]))
+              % tuple(2 * [NAME]))
             if EXTRAS:
               mdtext += (
                 "\n\n"
                 "* With all extra features:"
                 "\n\n"
                 "        pip install %s[%s]"
-                % (DISTRIBUTION, ','.join(EXTRAS)))
+                % (NAME, ','.join(EXTRAS)))
             return mdtext
 
 
