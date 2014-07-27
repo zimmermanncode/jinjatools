@@ -20,23 +20,26 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
+all = ['Environment']
+
 from itertools import chain
 
 import jinja2
 
-from .filters import filters as morefilters
-
-all = 'Environment',
 
 class Environment(jinja2.Environment):
-  def __init__(self, filters = {}, tests = {}, globals = {}, **kwargs):
-    jinja2.Environment.__init__(self, **kwargs)
+    def __init__(self, filters={}, tests={}, globals={}, **kwargs):
+        jinja2.Environment.__init__(self, **kwargs)
 
-    for name, func in chain(morefilters.items(), filters.items()):
-      self.filters[name] = func
+        morefilters = __import__('jinjatools.filters').filters.filters
+        for name, func in chain(morefilters.items(), filters.items()):
+            self.filters[name] = func
 
-    for name, func in tests.items():
-      self.tests[name] = func
+        for name, func in tests.items():
+            self.tests[name] = func
 
-    for name, value in globals.items():
-      self.globals[name] = value
+        for name, value in globals.items():
+            self.globals[name] = value
+
+
+# from .filters import filters as morefilters
