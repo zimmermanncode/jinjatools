@@ -20,63 +20,78 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
+__all__ = ['filters']
+
 from moretools import *
 
-__all__ = 'filters',
 
-def dictremove(dict_, *keys):
-  for key in keys:
-    try: del dict_[key]
-    except KeyError: pass
+def do_dictremove(dict_, *keys):
+    for key in keys:
+        try:
+            del dict_[key]
+        except KeyError:
+            pass
+    return dict_
 
-  return dict_
 
-def dictupdate(dict_, items = (), **kwitems):
-  dict_.update(items, **kwitems)
-  return dict_
+def do_dictupdate(dict_, items=None, **kwitems):
+    dict_.update(items or (), **kwitems)
+    return dict_
 
-filters = dict(
-  mapattr = mapattr,
-  mapmapattr = mapmapattr,
 
-  mapattrs = mapattrs,
-  mapmapattrs = mapmapattrs,
+def do_prefix(string, prefix):
+    return prefix + string
 
-  mapitem = mapitem,
-  mapmapitem = mapmapitem,
 
-  mapitems = mapitems,
-  mapmapitems = mapmapitems,
+def do_suffix(string, suffix):
+    return string + suffix
 
-  mapmethodcall = mapmethodcall,
-  mapmapmethodcall = mapmapmethodcall,
 
-  mapjoin = lambda seqs, sep: map(
+filters = {
+  'mapattr': mapattr,
+  'mapmapattr': mapmapattr,
+
+  'mapattrs': mapattrs,
+  'mapmapattrs': mapmapattrs,
+
+  'mapitem': mapitem,
+  'mapmapitem': mapmapitem,
+
+  'mapitems': mapitems,
+  'mapmapitems': mapmapitems,
+
+  'mapmethodcall': mapmethodcall,
+  'mapmapmethodcall': mapmapmethodcall,
+
+  'mapjoin': lambda seqs, sep: map(
     lambda seq: sep.join(map(str, seq)),
     seqs),
 
-  zip = lambda seq, *seqs: zip(*chain(seq, seqs)),
-  zipwith = zip,
+  'zip': lambda seq, *seqs: zip(*chain(seq, seqs)),
+  'zipwith': zip,
 
-  tee = tee,
+  'tee': tee,
 
-  repeat = repeat,
+  'repeat': repeat,
 
-  chain = lambda seq, *seqs: chain(*chain(seq, seqs)),
-  chainwith = chain,
+  'chain': lambda seq, *seqs: chain(*chain(seq, seqs)),
+  'chainwith': chain,
 
-  combine = combinations,
-  permutate = permutations,
+  'combine': combinations,
+  'permutate': permutations,
 
-  cross = lambda seq, *seqs: product(*chain(seq, seqs)),
-  crosswith = product,
+  'cross': lambda seq, *seqs: product(*chain(seq, seqs)),
+  'crosswith': product,
 
-  dict = dict,
+  'dict': dict,
 
-  dictremove = dictremove,
-  dictupdate = dictupdate,
+  'dictremove': do_dictremove,
+  'dictupdate': do_dictupdate,
 
-  partial = partial,
+  'partial': partial,
 
-  split = str.split,
-  )
+  'split': str.split,
+
+  'prefix': do_prefix,
+  'suffix': do_suffix,
+  }
