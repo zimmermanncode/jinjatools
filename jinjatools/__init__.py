@@ -20,14 +20,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with jinja-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-from . import zetup
+from zetup import find_zetup_config
 
-__distribution__ = zetup.DISTRIBUTION.find(__path__[0])
-__description__ = zetup.DESCRIPTION
+zfg = find_zetup_config(__name__)
 
-__version__ = zetup.VERSION
+__distribution__ = zfg.DISTRIBUTION.find(__path__[0])
+__description__ = zfg.DESCRIPTION
 
-__requires__ = zetup.REQUIRES.checked
+__version__ = zfg.VERSION
+
+__requires__ = zfg.REQUIRES.checked
 
 from .env import Environment
 # from .filters import filters
