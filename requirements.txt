@@ -1,4 +1,4 @@
 six
-path.py # path
-moretools >= 0.1a38
-Jinja2 # jinja2
+path.py #import path
+moretools >= 0.1
+Jinja2 #import jinja2
