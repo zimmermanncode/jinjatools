@@ -6,8 +6,11 @@
 \.pyc$
 __pycache__/
 
+^build/
 ^dist/
 \.egg-info
 ^\.tox/
 
 ^PKG-INFO$
+
+^\.conda/
