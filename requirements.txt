@@ -1,5 +1,5 @@
 six
 path.py #import path
-moretools >= 0.1
+moretools >= 0.1.2
 Jinja2 #import jinja2
-zetup
+zetup >= 0.2.2
