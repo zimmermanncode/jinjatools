@@ -24,14 +24,16 @@
 
 .. moduleauthor:: Stefan Zimmermann <zimmermann.code@gmail.com>
 """
-__all__ = ['JinjaBuilder']
+import jinjatools
+
+__import__('zetup').package(__name__, [
+    'JinjaBuilder',
+])
 
 import os
 
 from SCons.Builder import BuilderBase
 from SCons.Action import Action
-
-import jinjatools
 
 
 class JinjaBuilder(BuilderBase):

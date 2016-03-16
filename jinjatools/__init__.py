@@ -20,16 +20,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-jinjatools.  If not, see <http://www.gnu.org/licenses/>.
 
-from zetup import find_zetup_config
-
-zfg = find_zetup_config(__name__)
-
-__distribution__ = zfg.DISTRIBUTION.find(__path__[0])
-__description__ = zfg.DESCRIPTION
-
-__version__ = zfg.VERSION
-
-__requires__ = zfg.REQUIRES.checked
+__import__('zetup').toplevel(__name__, [
+    'Environment',
+])
 
 from .env import Environment
 # from .filters import filters

@@ -20,11 +20,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-jinjatools.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.core import urlresolvers
-
 import jinjatools
 
-all = 'JinjaLoader',
+__import__('zetup').extra_toplevel['django'](jinjatools, __name__, [
+    'JinjaLoader',
+])
+
+from django.core import urlresolvers
+
 
 class Template(object):
   def __init__(self, template):
@@ -38,9 +41,11 @@ class Template(object):
 
     return self.template.render(context)
 
+
 class Django(object):
     def url(self, name):
         return urlresolvers.reverse(name)
+
 
 class LoaderFactory(object):
   def __getitem__(self, DjangoLoader):
@@ -70,5 +75,6 @@ class LoaderFactory(object):
         return DjangoLoader.load_template(self, name, dirs)
 
     return JinjaLoader
+
 
 JinjaLoader = LoaderFactory()
