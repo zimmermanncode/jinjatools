@@ -22,7 +22,15 @@
 
 __all__ = ['filters']
 
-from moretools import *
+from six.moves import map, zip
+from itertools import repeat, chain, tee, product, \
+    combinations, permutations
+from functools import partial
+
+from moretools import \
+    mapattr, mapattrs, mapmapattr, mapmapattrs, \
+    mapitem, mapitems, mapmapitem, mapmapitems, \
+    mapmethodcall, mapmapmethodcall
 
 
 def do_dictremove(dict_, *keys):
