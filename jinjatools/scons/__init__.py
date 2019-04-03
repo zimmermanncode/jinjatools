@@ -39,8 +39,8 @@ from SCons.Action import Action
 class JinjaBuilder(BuilderBase):
     def __init__(self, jinja_loader, context={}):
         BuilderBase.__init__(
-          self, action=Action(self.jinja_action),
-          src_suffix='.jinja', suffix='')
+            self, action=Action(self.jinja_action),
+            src_suffix='.jinja', suffix='')
 
         self.jinja_env = jinjatools.Environment(loader=jinja_loader)
         self.jinja_template_context = context
@@ -58,14 +58,16 @@ class JinjaBuilder(BuilderBase):
         except KeyError:
             pass
         overlay = self.jinja_env.overlay(**options)
-        template = overlay.get_template(str(source[0]))
+        sourcepath = str(source[0])
+        # on Windows, sourcepath has '\\' sep, but Jinja only works with '/'
+        sourcepath = '/'.join(sourcepath.split(os.path.sep))
+        template = overlay.get_template(sourcepath)
 
-        targetpath = str(target[0])
-        # On Windows targetpath has '\\' sep, but Jinja only works with '/':
-        targetpath = '/'.join(targetpath.split(os.path.sep))
+        # targetpath = str(target[0])
+        # # On Windows targetpath has '\\' sep, but Jinja only works with '/':
+        # targetpath = '/'.join(targetpath.split(os.path.sep))
 
-        targetfile = open(targetpath, 'wb')
-        targetfile.write(template.render(context).encode('utf-8'))
-        targetfile.close()
+        with open(str(target[0]), 'wb') as targetfile:
+            targetfile.write(template.render(context).encode('utf-8'))
 
     jinja_action.__name__ = 'Jinja'
