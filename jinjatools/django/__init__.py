@@ -20,61 +20,61 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-jinjatools.  If not, see <http://www.gnu.org/licenses/>.
 
+import django.urls
+
 import jinjatools
 
 __import__('zetup').extra_toplevel['django'](jinjatools, __name__, [
     'JinjaLoader',
 ])
 
-from django.core import urlresolvers
-
 
 class Template(object):
-  def __init__(self, template):
-    self.template = template
 
-  def render(self, context):
-    dicts = context.dicts
-    context = {}
-    for d in dicts:
-      context.update(d)
+    def __init__(self, template):
+        self.template = template
 
-    return self.template.render(context)
+    def render(self, context):
+        dicts = context.dicts
+        context = {}
+        for d in dicts:
+            context.update(d)
+
+        return self.template.render(context)
 
 
 class Django(object):
+
     def url(self, name):
-        return urlresolvers.reverse(name)
+        return django.urls.reverse(name)
 
 
 class LoaderFactory(object):
-  def __getitem__(self, DjangoLoader):
-    class JinjaLoader(DjangoLoader):
-      def __init__(
-        self, jinja_loader, filters = {}, tests = {}, globals = {},
-        **kwargs
-        ):
-        DjangoLoader.__init__(self)
 
-        globals = dict(globals)
-        globals.update(
-          django=Django(),
-          )
-        self.jinja_env = jinjatools.Environment(
-          loader = jinja_loader,
-          filters = filters, tests = tests, globals = globals)
+    def __getitem__(self, DjangoLoader):
+        class JinjaLoader(DjangoLoader):
+            def __init__(
+                    self, jinja_loader, filters={}, tests={}, globals={},
+                    **kwargs):
+                DjangoLoader.__init__(self)
 
-      def load_template(self, name, dirs):
-        if name.startswith('jinja:'):
-          name = name.split('jinja:', 1)[1]
-          source, origin = self.load_template_source(name, dirs)
-          return (
-            Template(self.jinja_env.from_string(source)),
-            origin)
+                globals = dict(globals)
+                globals.update(django=Django())
+                self.jinja_env = jinjatools.Environment(
+                    loader=jinja_loader,
+                    filters=filters, tests=tests, globals=globals)
 
-        return DjangoLoader.load_template(self, name, dirs)
+            def load_template(self, name, dirs):
+                if name.startswith('jinja:'):
+                    name = name.split('jinja:', 1)[1]
+                    source, origin = self.load_template_source(name, dirs)
+                    return (
+                        Template(self.jinja_env.from_string(source)),
+                        origin)
 
-    return JinjaLoader
+                return DjangoLoader.load_template(self, name, dirs)
+
+        return JinjaLoader
 
 
 JinjaLoader = LoaderFactory()
