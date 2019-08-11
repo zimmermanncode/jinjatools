@@ -12,7 +12,7 @@ python:
 install:
   - python -m pip install -U pip setuptools
   - pip install -U -r requirements.txt
-  - pip install -U -e .zetup[commands]
+  - pip install -U -e .
 
   - cd test && pip uninstall --yes jinjatools && cd ..
   - pip install -e .
