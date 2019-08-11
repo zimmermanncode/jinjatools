@@ -10,9 +10,8 @@ python:
   - pypy
 
 install:
-  - python -m pip install -U pip setuptools
-  - pip install -U -r requirements.txt
-  - pip install -U -e .
+  - python -m pip install -U pip setuptools six wheel
+  - pip install -U -e .[all]
 
   - cd test && pip uninstall --yes jinjatools && cd ..
   - pip install -e .
@@ -23,8 +22,17 @@ script:
   - py.test -vv --doctest-modules jinjatools test --cov jinjatools --cov test --cov-report term-missing
   - tox -r -v
 
+  # - pip uninstall --yes jinjatools
   - pip install zetup[all]
   - zetup install
   # - zetup pytest
   - zetup sdist
   - zetup tox
+
+deploy:
+  provider: pypi
+  user: userzimmermann
+  password:
+    secure: Xkp8/2TCGJqTOg152xdaTG9g5+pcMo6FHV438pNlknlMmzhcvCj25Re6+9/goEd36/ImD1k1FnPKnrzU7zCD/RacC246x7YwiR6Le9O5igqvoX1Z3D/1O6+yc6hp9YzeN0L1MYck6wcWNmc8nBsQMkO0k8OAkAY1oNMWCTsZFOYsxclWB7Jwm0rSsfQUsWbvcdu3HvL8fKYy8m8Unw33f7IqcsjlWMc/bLY7GxsQ5+MnrBeXB6bcm50jdMwJ4QhKAsf70AEZHib6K/cw4eBEacEbcnxNvLXhVuXzD0lCwjkCYGCf0NOxO3vAnNsoko7PwpEKOex9igz1hb8PTlN59TtKDQrgwtL9d5EGeuFWfwiPZqIB32IbFMk5ZsMyfFog9ixs4jMDBe+j5gLT+l7ILYWO1T52qtmN1NoTPvyiXIo4cUoptFzNCfzFIA5WgQ2l4305fDGARa6xOmPVlcfaI5J7BMHi6T41gV+vXRtl9OB9tejVSMm77QKNT4YVuyLv2Q7Wb+N2jrBAEUPLxSCeRogE/FiNk40jzScAo9f4oJ0n5xHASFmsXUifdgEZ66twyUBUtNhUmwJwbbFfJ21GbYy9HHtD/jiPqBUMzvLz+0cC147W5NHHZflKt0MwgTtZAPiRvXi00g+pNh5+X2RlD05btGWmQ1F+KNX0OWkuYkI=
+  on:
+    python: '2.7'
