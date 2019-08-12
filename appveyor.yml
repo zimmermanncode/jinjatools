@@ -17,7 +17,7 @@ build: off
 install:
   - cmd: |
         %PY% -m pip install -U pip setuptools six wheel
-        %PY% -m pip install -U -e .
+        %PY% -m pip install -U -e .[all]
 
   - cmd: |
         cd test && %PY% -m pip uninstall --yes jinjatools && cd ..
