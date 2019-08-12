@@ -8,9 +8,15 @@ __pycache__/
 
 ^build/
 ^dist/
-\.egg-info
+^\.eggs/
+\.egg-info/
+
+^\.coverage
+^\.pytest_cache/
 ^\.tox/
 
 ^PKG-INFO$
 
 ^\.conda/
+^\.idea/
+^\.ionide/
